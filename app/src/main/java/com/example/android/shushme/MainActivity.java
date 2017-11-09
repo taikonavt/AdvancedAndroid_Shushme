@@ -160,15 +160,22 @@ public class MainActivity extends AppCompatActivity implements
                 null);
 
         if (data == null || data.getCount() == 0) return;
+            
         List<String> guids = new ArrayList<String>();
+            
         while (data.moveToNext()) {
             guids.add(data.getString(data.getColumnIndex(PlaceContract.PlaceEntry.COLUMN_PLACE_ID)));
         }
+            
+        // https://developers.google.com/places/android-api/place-details
         PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mClient,
                 guids.toArray(new String[guids.size()]));
+            
         placeResult.setResultCallback(new ResultCallback<PlaceBuffer>() {
+                
             @Override
             public void onResult(@NonNull PlaceBuffer places) {
+                    
                 mAdapter.swapPlaces(places);
                 mGeofencing.updateGeofencesList(places);
                 if (mIsEnabled) mGeofencing.registerAllGeofences();
